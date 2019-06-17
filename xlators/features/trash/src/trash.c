@@ -1642,7 +1642,7 @@ trash_truncate_mkdir_cbk(call_frame_t *frame, void *cookie, xlator_t *this,
     char *tmp_dirname = NULL;
     char *dir_name = NULL;
     char *tmp_stat = NULL;
-    char real_path[PATH_MAX] = {
+    char real_path[PATH_MAX * 2] = {
         0,
     };
     size_t count = 0;

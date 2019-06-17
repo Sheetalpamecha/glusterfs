@@ -6761,7 +6761,6 @@ afr_serialize_xattrs_with_delimiter(call_frame_t *frame, xlator_t *this,
     int i = 0;
     int len = 0;
     int keylen = 0;
-    size_t str_len = 0;
     int ret = -1;
 
     priv = this->private;
@@ -6770,9 +6769,8 @@ afr_serialize_xattrs_with_delimiter(call_frame_t *frame, xlator_t *this,
     keylen = strlen(local->cont.getxattr.name);
     for (i = 0; i < priv->child_count; i++) {
         if (!local->replies[i].valid || local->replies[i].op_ret) {
-            str_len = strlen(default_str);
-            buf = strncat(buf, default_str, str_len);
-            len += str_len;
+            buf = strncat(buf, default_str, sizeof(buf) - strlen(buf) - 1);
+            len += strlen(buf);
             buf[len++] = delimiter;
             buf[len] = '\0';
         } else {
@@ -6785,9 +6783,8 @@ afr_serialize_xattrs_with_delimiter(call_frame_t *frame, xlator_t *this,
                        i);
                 goto out;
             }
-            str_len = strlen(xattr);
-            buf = strncat(buf, xattr, str_len);
-            len += str_len;
+            buf = strncat(buf, xattr, sizeof(buf) - strlen(buf) - 1);
+            len += strlen(buf);
             buf[len++] = delimiter;
             buf[len] = '\0';
         }
