@@ -7944,10 +7944,11 @@ out:
                      "volume",
                      path);
         } else {
-            snprintf(msg, sizeof(msg),
-                     "parent directory %s is "
-                     "already part of a volume",
-                     curdir);
+            if (snprintf(msg, sizeof(msg),
+                         "parent directory %s is "
+                         "already part of a volume",
+                         curdir) > sizeof(msg))
+                ;
         }
     }
 

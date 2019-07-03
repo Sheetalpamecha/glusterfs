@@ -33,7 +33,10 @@ glusterd_svc_build_snapd_logdir(char *logdir, char *volname, size_t len)
 static void
 glusterd_svc_build_snapd_logfile(char *logfile, char *logdir, size_t len)
 {
-    snprintf(logfile, len, "%s/snapd.log", logdir);
+    if (snprintf(logfile, len, "%s/snapd.log", logdir) > len) {
+        gf_msg_plain(GF_LOG_WARNING, "logfile truncated");
+        return;
+    }
 }
 
 void
