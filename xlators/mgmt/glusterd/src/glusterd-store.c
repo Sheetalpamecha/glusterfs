@@ -132,7 +132,10 @@ glusterd_store_brickinfofname_set(glusterd_brickinfo_t *brickinfo,
 
     glusterd_store_key_vol_brick_set(brickinfo, key_vol_brick,
                                      sizeof(key_vol_brick));
-    snprintf(brickfname, len, "%s:%s", brickinfo->hostname, key_vol_brick);
+    strncpy(brickfname, brickinfo->hostname, len);
+    strcat(brickfname, ":");
+    strcat(brickfname, key_vol_brick);
+    /*snprintf(brickfname, len, "%s:%s", brickinfo->hostname, key_vol_brick);*/
 }
 
 static void
@@ -156,7 +159,10 @@ glusterd_store_brickinfopath_set(glusterd_volinfo_t *volinfo,
     GLUSTERD_GET_BRICK_DIR(brickdirpath, volinfo, priv);
     glusterd_store_brickinfofname_set(brickinfo, brickfname,
                                       sizeof(brickfname));
-    snprintf(brickpath, len, "%s/%s", brickdirpath, brickfname);
+    strncpy(brickpath, brickdirpath, len);
+    strcat(brickpath, "/");
+    strcat(brickpath, brickfname);
+    /*snprintf(brickpath, len, "%s/%s", brickdirpath, brickfname);*/
 }
 
 static void
@@ -175,8 +181,9 @@ glusterd_store_snapd_path_set(glusterd_volinfo_t *volinfo, char *snapd_path,
     GF_ASSERT(priv);
 
     GLUSTERD_GET_VOLUME_DIR(volpath, volinfo, priv);
-
-    snprintf(snapd_path, len, "%s/snapd.info", volpath);
+    strncpy(snapd_path, volpath, len);
+    strcat(snapd_path, "/snapd.info");
+    /*snprintf(snapd_path, len, "%s/snapd.info", volpath);*/
 }
 
 gf_boolean_t
@@ -1189,7 +1196,10 @@ glusterd_store_volfpath_set(glusterd_volinfo_t *volinfo, char *volfpath,
     GF_ASSERT(len <= PATH_MAX);
 
     glusterd_store_voldirpath_set(volinfo, voldirpath);
-    snprintf(volfpath, len, "%s/%s", voldirpath, GLUSTERD_VOLUME_INFO_FILE);
+    strncpy(volfpath, voldirpath, len);
+    strcat(volfpath, "/");
+    strcat(volfpath, GLUSTERD_VOLUME_INFO_FILE);
+    /*snprintf(volfpath, len, "%s/%s", voldirpath, GLUSTERD_VOLUME_INFO_FILE);*/
 }
 
 static void
@@ -1204,8 +1214,11 @@ glusterd_store_node_state_path_set(glusterd_volinfo_t *volinfo,
     GF_ASSERT(len <= PATH_MAX);
 
     glusterd_store_voldirpath_set(volinfo, voldirpath);
-    snprintf(node_statepath, len, "%s/%s", voldirpath,
-             GLUSTERD_NODE_STATE_FILE);
+    strncpy(node_statepath, voldirpath, len);
+    strcat(node_statepath, "/");
+    strcat(node_statepath, GLUSTERD_NODE_STATE_FILE);
+    /*snprintf(node_statepath, len, "%s/%s", voldirpath,
+             GLUSTERD_NODE_STATE_FILE);*/
 }
 
 static void
@@ -1220,8 +1233,11 @@ glusterd_store_quota_conf_path_set(glusterd_volinfo_t *volinfo,
     GF_ASSERT(len <= PATH_MAX);
 
     glusterd_store_voldirpath_set(volinfo, voldirpath);
-    snprintf(quota_conf_path, len, "%s/%s", voldirpath,
-             GLUSTERD_VOLUME_QUOTA_CONFIG);
+    strncpy(quota_conf_path, voldirpath, len);
+    strcat(quota_conf_path, "/");
+    strcat(quota_conf_path, GLUSTERD_VOLUME_QUOTA_CONFIG);
+    /*snprintf(quota_conf_path, len, "%s/%s", voldirpath,
+             GLUSTERD_VOLUME_QUOTA_CONFIG);*/
 }
 
 static void
@@ -4472,7 +4488,10 @@ glusterd_store_uuid_peerpath_set(glusterd_peerinfo_t *peerinfo, char *peerfpath,
 
     glusterd_store_peerinfo_dirpath_set(peerdir, sizeof(peerdir));
     gf_uuid_unparse(peerinfo->uuid, str);
-    snprintf(peerfpath, len, "%s/%s", peerdir, str);
+    strncpy(peerfpath, peerdir, len);
+    strcat(peerfpath, "/");
+    strcat(peerfpath, str);
+    /*snprintf(peerfpath, len, "%s/%s", peerdir, str);*/
 }
 
 static void
@@ -4486,7 +4505,10 @@ glusterd_store_hostname_peerpath_set(glusterd_peerinfo_t *peerinfo,
     GF_ASSERT(len >= PATH_MAX);
 
     glusterd_store_peerinfo_dirpath_set(peerdir, sizeof(peerdir));
-    snprintf(peerfpath, len, "%s/%s", peerdir, peerinfo->hostname);
+    strncpy(peerfpath, peerdir, len);
+    strcat(peerfpath, "/");
+    strcat(peerfpath, peerinfo->hostname);
+    /*snprintf(peerfpath, len, "%s/%s", peerdir, peerinfo->hostname);*/
 }
 
 int32_t
