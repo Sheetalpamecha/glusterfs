@@ -2005,7 +2005,10 @@ __gf_rdma_ioq_churn_request(gf_rdma_peer_t *peer, gf_rdma_ioq_t *entry,
         hdr->rm_type = hton32(GF_RDMA_MSG);
     }
 
-    chunkptr = &hdr->rm_body.rm_chunks[0];
+    uint32_t local_chunks = hdr->rm_body.rm_chunks[0];
+    chunkptr = &local_chunks;
+
+    /* chunkptr = &hdr->rm_body.rm_chunks[0];*/
     if (rtype != gf_rdma_noch) {
         ret = __gf_rdma_create_read_chunks(peer, entry, rtype, &chunkptr,
                                            request_ctx);
@@ -2033,7 +2036,10 @@ __gf_rdma_ioq_churn_request(gf_rdma_peer_t *peer, gf_rdma_ioq_t *entry,
         *chunkptr++ = 0; /* no reply chunk */
     }
 
-    buf = (char *)chunkptr;
+    hdr->rm_body.rm_chunks[0] = local_chunks;
+    buf = (char *)&hdr->rm_body.rm_chunks[0];
+
+    /* buf = (char *)chunkptr;*/
 
     if (rtype != gf_rdma_areadch) {
         iov_unload(buf, entry->rpchdr, entry->rpchdr_count);
@@ -2217,7 +2223,7 @@ __gf_rdma_reply_encode_write_chunks(gf_rdma_peer_t *peer, uint32_t payload_size,
 
     ret = 0;
 
-    *ptr = &target_array->wc_array[i].wc_target.rs_length;
+    *ptr = (uint32_t *)(void *)&target_array->wc_array[i].wc_target.rs_length;
 out:
     return ret;
 }
